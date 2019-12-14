@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Money Club Lamda.
+Resources:
+  LambdaSpringBootFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.moneyclub.LambdaHandler::handleRequest
+      Runtime: java8
+      CodeUri: s3://spring-boot-amit1/5d0302faba01daa36ee67af1b65eb372
+      MemorySize: 1512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 60
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+Outputs:
+  LambdaSpringBootApi:
+    Description: URL for application
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage/getcolor
+    Export:
+      Name: LambdaSpringBootJavaApp
