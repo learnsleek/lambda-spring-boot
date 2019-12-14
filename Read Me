@@ -1,0 +1,12 @@
+Deploy with SAM :-
+
+mvn clean package
+
+aws s3 mb s3://spring-boot-amit
+
+
+aws cloudformation package --template-file sam.yaml --output-template-file target/output-sam.yaml --s3-bucket spring-boot-amit  --profile=mc
+
+
+aws cloudformation deploy --template-file target/output-sam.yaml --stack-name spring-boot-amit --capabilities CAPABILITY_IAM --profile=mc
+
