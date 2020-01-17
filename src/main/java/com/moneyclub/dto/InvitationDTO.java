@@ -2,8 +2,9 @@ package com.moneyclub.dto;
 
 public class InvitationDTO {
 
+    private int campaignId;
     private String entityType;
-    private String entityvalue;
+    private String entityValue;
     private String message;
     private String status;
 
@@ -15,14 +16,12 @@ public class InvitationDTO {
         this.entityType = entityType;
     }
 
-    public String getEntityvalue() {
-        return entityvalue;
+    public String getEntityValue() {
+        return entityValue;
     }
-
-    public void setEntityvalue(String entityvalue) {
-        this.entityvalue = entityvalue;
+    public void setEntityValue(String entityValue) {
+        this.entityValue = entityValue;
     }
-
     public String getMessage() {
         return message;
     }
@@ -37,5 +36,13 @@ public class InvitationDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getCampaignId() {
+        return campaignId;
+    }
+
+    public void setCampaignId(int campaignId) {
+        this.campaignId = campaignId;
     }
 }

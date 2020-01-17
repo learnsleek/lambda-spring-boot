@@ -13,6 +13,11 @@ public class APIException {
     public APIException() {
     }
 
+    public APIException(int errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
+
     public APIException(String message, Throwable throwable,
                         HttpStatus httpStatus, ZonedDateTime timeStamp) {
         this.errorCode = errorCode;

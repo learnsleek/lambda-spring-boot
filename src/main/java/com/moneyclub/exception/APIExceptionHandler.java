@@ -16,6 +16,7 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
     private final String BUSINESS_LOGIC_EXCEPTION = "BUSINESS_LOGIC_EXCEPTION";
     private final String DATABASE_LEVEL_EXCEPTION = "DATABASE_LEVEL_EXCEPTION";
     private final String OTHER_EXCEPTION = "OTHER_EXCEPTION";
+    private final String REQUIRED_DATA = "REQUIRED_DATA";
 
     @ExceptionHandler(value = APIRequestException.class)
     public ResponseEntity<Object> handleExeption(APIRequestException apiReqException){
@@ -31,6 +32,11 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
             apiException.setErrorCode(
                     ErrorCode.valueOf(DATABASE_LEVEL_EXCEPTION).getErrorCode());
             apiException.setErrorMessage(DATABASE_LEVEL_EXCEPTION);
+        }else if(apiReqException != null &&
+                apiReqException.getCause() instanceof RequiredDataException){
+            apiException.setErrorCode(
+                    ErrorCode.valueOf(REQUIRED_DATA).getErrorCode());
+            apiException.setErrorMessage(REQUIRED_DATA);
         }else{
             apiException.setErrorCode(
                     ErrorCode.valueOf(OTHER_EXCEPTION).getErrorCode());

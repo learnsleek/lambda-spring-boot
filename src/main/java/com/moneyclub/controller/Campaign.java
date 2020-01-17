@@ -1,9 +1,9 @@
 package com.moneyclub.controller;
 
+import com.moneyclub.constant.ErrorCode;
+import com.moneyclub.dto.ErrorDTO;
 import com.moneyclub.dto.InvitationDTO;
-import com.moneyclub.exception.APIRequestException;
-import com.moneyclub.exception.BusinessException;
-import com.moneyclub.exception.PersistentException;
+import com.moneyclub.exception.*;
 import com.moneyclub.services.ICampaign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,43 +23,53 @@ public class Campaign {
     @Autowired
     ICampaign campaignService;
 
-    @RequestMapping({ "/getList" })
-    public ResponseEntity<List<InvitationDTO>> groupInvitation() {
-        List<InvitationDTO>  invitationList = null;
+    @RequestMapping({"/getList"})
+    public ResponseEntity<Object> groupInvitation(@RequestBody InvitationDTO invitationDTO) {
+        List<InvitationDTO> invitationList = null;
         try {
-            logger.info("groupInvitation :: Started - ");
-            invitationList = campaignService.getCampaignList();
-        }catch (BusinessException ex){
-            logger.error("groupInvitation :: Started - ");
+            if (invitationDTO.getStatus() != null) {
+                logger.info("groupInvitation getList:: Started - " + invitationDTO.getStatus());
+                invitationList = campaignService.getCampaignList(invitationDTO.getCampaignId(), invitationDTO.getStatus());
+            } else {
+                return new ResponseEntity(new ErrorDTO(100, "REQUIRED DATA MISSING"), HttpStatus.FORBIDDEN);
+            }
+        } catch (BusinessException ex) {
             ex.printStackTrace();
             throw new APIRequestException("groupInvitation :: ", ex);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new APIRequestException("groupInvitation :: ", ex);
         }
+        logger.info("groupInvitation getList:: End - "+ invitationList);
         return new ResponseEntity<>(invitationList, HttpStatus.OK);
     }
 
     @PostMapping(path = "/updateCampaign", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Boolean> updateCampaignStatus(@RequestBody InvitationDTO invitationDTO) {
-         Boolean status= null;
+        Boolean status = null;
         try {
-            logger.info("groupInvitation :: Started - ");
-            if(invitationDTO.getEntityType() != null && invitationDTO.getEntityvalue() != null && invitationDTO.getMessage() !=null)
-                status = campaignService.updateCampaignStatus(invitationDTO.getEntityType(), invitationDTO.getEntityvalue(), invitationDTO.getStatus(), invitationDTO.getMessage());
 
-        }catch (PersistentException ex){
+            if (invitationDTO.getEntityType() != null && invitationDTO.getEntityValue() != null && invitationDTO.getMessage() != null){
+                logger.info("updateCampaignStatus:: Started - " + invitationDTO.getEntityValue());
+                 status = campaignService.updateCampaignStatus(invitationDTO.getEntityType(), invitationDTO.getEntityValue(), invitationDTO.getStatus(), invitationDTO.getMessage());
+            } else {
+                return new ResponseEntity(new ErrorDTO(100, "REQUIRED DATA MISSING"), HttpStatus.FORBIDDEN);
+            }
+
+
+        } catch (PersistentException ex) {
             logger.error("groupInvitation :: Started - ");
             ex.printStackTrace();
             throw new APIRequestException("updateCampaignStatus :: ", ex);
-        }catch (BusinessException ex){
+        } catch (BusinessException ex) {
             logger.error("groupInvitation :: Started - ");
             ex.printStackTrace();
             throw new APIRequestException("updateCampaignStatus :: ", ex);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new APIRequestException("updateCampaignStatus :: ", ex);
         }
+        logger.info("updateCampaignStatus :: End - "+ status);
         return new ResponseEntity<Boolean>(status, HttpStatus.OK);
     }
 }
