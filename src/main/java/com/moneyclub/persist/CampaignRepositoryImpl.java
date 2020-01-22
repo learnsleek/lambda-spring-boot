@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<CampaignEntity> findByCampaignAndStatus(final int campaignId, final String status) throws PersistentException {
+    public List<CampaignEntity> findByCampaignAndStatus(final long campaignId, final int status) throws PersistentException {
 
         List<CampaignEntity> campaignEntityList = null;
 
@@ -31,9 +32,10 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
                                     rs.getString("entityType"),
                                     rs.getString("entityValue"),
                                     rs.getString("message"),
-                                    rs.getString("status"),
+                                    rs.getInt("status"),
                                     rs.getString("comments"),
-                                    rs.getString("clubname")
+                                    rs.getString("clubname"),
+                                    rs.getLong("campaign_id")
                             )
             );
         } catch (DataAccessException ex) {
@@ -58,9 +60,10 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
                                     rs.getString("entityType"),
                                     rs.getString("entityValue"),
                                     rs.getString("message"),
-                                    rs.getString("status"),
+                                    rs.getInt("status"),
                                     rs.getString("comments"),
-                                    rs.getString("clubname")
+                                    rs.getString("clubname"),
+                                    rs.getLong("campaign_id")
                             )
             );
         } catch (DataAccessException ex) {
@@ -69,14 +72,42 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
         return campaignEntityList;
     }
 
-    public int updateStatus(final long id, final String status, final String comments) throws PersistentException {
+    @Override
+    public List<CampaignEntity>  findById(Long id) throws PersistentException {
+        List<CampaignEntity> campaignEntityList = null;
+        try {
+            campaignEntityList = jdbcTemplate.query(
+                    "select * from mc_campaign_details where  id = ?",
+                    new Object[]{id},
+                    (rs, rowNum) ->
+                            new CampaignEntity(
+                                    rs.getLong("id"),
+                                    rs.getDate("creationDateTime"),
+                                    rs.getDate("sentDateTime"),
+                                    rs.getString("entityType"),
+                                    rs.getString("entityValue"),
+                                    rs.getString("message"),
+                                    rs.getInt("status"),
+                                    rs.getString("comments"),
+                                    rs.getString("clubname"),
+                                    rs.getLong("campaign_id")
+                            )
+            );
+        } catch (DataAccessException ex) {
+            throw new PersistentException("Error querying findById from database", ex);
+        }
+        return campaignEntityList;
+    }
+
+    @Transactional
+    public int updateStatus(final long id, final int status, final String comments) throws PersistentException {
         int stat;
         try {
             stat = jdbcTemplate.update(
                     "update mc_campaign_details set status = ?, comments =?, sentDateTime= now() where id=?",
                     status, comments, id);
         } catch (DataAccessException ex) {
-            throw new PersistentException("Error querying findByCampaignAndStatus from database", ex);
+            throw new PersistentException("Error querying updateStatus from database", ex);
         }
         return stat;
     }

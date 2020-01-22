@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ICampaign {
 
-    List<InvitationDTO> getCampaignList(final int campaignId, final String status) throws BusinessException;
-    Boolean updateCampaignStatus(String entityType, String entityValue, String status, String comments) throws BusinessException;
+    List<InvitationDTO> getCampaignList(final long campaignId, final int status) throws BusinessException;
+    Boolean updateCampaignStatus(long id, int status, String comments) throws BusinessException;
 }

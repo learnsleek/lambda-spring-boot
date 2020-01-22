@@ -10,14 +10,17 @@ public class CampaignEntity {
     private String entityType;
     private String entityVal;
     private String message;
-    private String status;
+    private int status;
     private String comments;
     private String clubname;
+    private Long campaignId;
+
 
 
     public  CampaignEntity(Long id, Date creationDateTime, Date sentDateTime,
                            String entityType, String entityVal, String message,
-                           String status, String comments, String clubname){
+                           int status, String comments, String clubname,
+                           long campaignId){
         this.id =id;
         this.sentDateTime = sentDateTime;
         this.creationDateTime = creationDateTime;
@@ -27,6 +30,7 @@ public class CampaignEntity {
         this.status = status;
         this.comments =comments;
         this.clubname = clubname;
+        this.campaignId = campaignId;
     }
     public CampaignEntity(){
 
@@ -65,16 +69,17 @@ public class CampaignEntity {
         this.message = message;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public String getComments() {
         return comments;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public void setComments(String comments) {
@@ -103,6 +108,14 @@ public class CampaignEntity {
 
     public void setClubname(String clubname) {
         this.clubname = clubname;
+    }
+
+    public Long getCampaignId() {
+        return campaignId;
+    }
+
+    public void setCampaignId(Long campaignId) {
+        this.campaignId = campaignId;
     }
 
     @Override

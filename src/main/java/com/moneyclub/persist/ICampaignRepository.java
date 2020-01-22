@@ -9,8 +9,9 @@ import java.util.List;
 
 @Repository
 public interface ICampaignRepository {
-    List<CampaignEntity> findByCampaignAndStatus(final int campaignId, final String status) throws PersistentException;
+    List<CampaignEntity> findByCampaignAndStatus(final long campaignId, final int status) throws PersistentException;
     List<CampaignEntity> findByEntityTypeAndEntityVal(final String entityType, final String entityValue) throws PersistentException;
-    int updateStatus(final long id, final String status, final String comments) throws PersistentException;
+    List<CampaignEntity>  findById(final Long id) throws PersistentException;
+    int updateStatus(final long id, final int status, final String comments) throws PersistentException;
 
 }

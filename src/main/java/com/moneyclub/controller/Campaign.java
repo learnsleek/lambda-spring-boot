@@ -1,6 +1,5 @@
 package com.moneyclub.controller;
 
-import com.moneyclub.constant.ErrorCode;
 import com.moneyclub.dto.ErrorDTO;
 import com.moneyclub.dto.InvitationDTO;
 import com.moneyclub.exception.*;
@@ -27,7 +26,7 @@ public class Campaign {
     public ResponseEntity<Object> groupInvitation(@RequestBody InvitationDTO invitationDTO) {
         List<InvitationDTO> invitationList = null;
         try {
-            if (invitationDTO.getStatus() != null) {
+            if (invitationDTO.getCampaignId()>0) {
                 logger.info("groupInvitation getList:: Started - " + invitationDTO.getStatus());
                 invitationList = campaignService.getCampaignList(invitationDTO.getCampaignId(), invitationDTO.getStatus());
             } else {
@@ -49,12 +48,12 @@ public class Campaign {
         Boolean status = null;
         try {
 
-            if (invitationDTO.getEntityType() != null && invitationDTO.getEntityValue() != null && invitationDTO.getMessage() != null){
+           // if (invitationDTO.getEntityType() != null && invitationDTO.getEntityValue() != null && invitationDTO.getMessage() != null){
                 logger.info("updateCampaignStatus:: Started - " + invitationDTO.getEntityValue());
-                 status = campaignService.updateCampaignStatus(invitationDTO.getEntityType(), invitationDTO.getEntityValue(), invitationDTO.getStatus(), invitationDTO.getMessage());
-            } else {
-                return new ResponseEntity(new ErrorDTO(100, "REQUIRED DATA MISSING"), HttpStatus.FORBIDDEN);
-            }
+                 status = campaignService.updateCampaignStatus(invitationDTO.getId(), invitationDTO.getStatus(), invitationDTO.getMessage());
+           // } else {
+           //     return new ResponseEntity(new ErrorDTO(100, "REQUIRED DATA MISSING"), HttpStatus.FORBIDDEN);
+            //}
 
 
         } catch (PersistentException ex) {

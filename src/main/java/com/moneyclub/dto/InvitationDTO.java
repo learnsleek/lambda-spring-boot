@@ -2,11 +2,20 @@ package com.moneyclub.dto;
 
 public class InvitationDTO {
 
-    private int campaignId;
+    private Long id;
+    private Long campaignId;
     private String entityType;
     private String entityValue;
     private String message;
-    private String status;
+    private int status;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getEntityType() {
         return entityType;
@@ -30,19 +39,19 @@ public class InvitationDTO {
         this.message = message;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public int getCampaignId() {
+    public Long getCampaignId() {
         return campaignId;
     }
 
-    public void setCampaignId(int campaignId) {
+    public void setCampaignId(Long campaignId) {
         this.campaignId = campaignId;
     }
 }

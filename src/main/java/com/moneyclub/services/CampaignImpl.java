@@ -23,8 +23,8 @@ public class CampaignImpl implements ICampaign {
     ICampaignRepository campaignRepository;
 
 
-    public List<InvitationDTO> getCampaignList(final int campaignId, final String status) throws BusinessException {
-        List<InvitationDTO> invitationDTOList = null;
+    public List<InvitationDTO> getCampaignList(final long campaignId, final int status) throws BusinessException {
+        List<InvitationDTO> invitationDTOList = new ArrayList<>();
         try {
             List<CampaignEntity> campaignEntities = campaignRepository.findByCampaignAndStatus(campaignId, status);
 
@@ -32,10 +32,12 @@ public class CampaignImpl implements ICampaign {
                 invitationDTOList = new ArrayList<>();
                 for (CampaignEntity campaign : campaignEntities) {
                     InvitationDTO invitationDTO = new InvitationDTO();
+                    invitationDTO.setId(campaign.getId());
                     invitationDTO.setEntityType(campaign.getEntityType());
                     invitationDTO.setEntityValue(campaign.getEntityVal());
                     invitationDTO.setMessage(campaign.getMessage());
                     invitationDTO.setStatus(campaign.getStatus());
+                    invitationDTO.setCampaignId(campaign.getCampaignId());
                     invitationDTOList.add(invitationDTO);
                 }
             }
@@ -45,11 +47,11 @@ public class CampaignImpl implements ICampaign {
         return invitationDTOList;
     }
 
-
-    public Boolean updateCampaignStatus(String entityType, String entityValue, String status, String comments) throws BusinessException {
+    public Boolean updateCampaignStatus(long id, int status, String comments) throws BusinessException {
         try {
-        List<CampaignEntity>  campaignEntityList = campaignRepository.findByEntityTypeAndEntityVal(entityType, entityValue);
-        logger.info("entityType, entityValue " +entityType + " :: " + entityValue + "campaignEntityList" +campaignEntityList );
+        //List<CampaignEntity>  campaignEntityList = campaignRepository.findByEntityTypeAndEntityVal(entityType, entityValue);
+            List<CampaignEntity>  campaignEntityList = campaignRepository.findById(id);
+        logger.info("id" + id + "campaignEntityList" +campaignEntityList );
         if(campaignEntityList != null && campaignEntityList.size() >0) {
             CampaignEntity campaignEntity = campaignEntityList.get(0);
             campaignEntity.setStatus(status);
