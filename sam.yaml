@@ -11,7 +11,7 @@ Resources:
       CodeUri: target/club-0.0.1-SNAPSHOT.jar
       MemorySize: 1512
       Policies: AWSLambdaBasicExecutionRole
-      Timeout: 60
+      Timeout: 900
       Events:
         GetResource:
           Type: Api
@@ -20,8 +20,8 @@ Resources:
             Method: any
 
 Outputs:
-  LambdaSpringBootApi:
+  MarketingDBApi:
     Description: URL for application
-    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage/getcolor'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage/'
     Export:
-      Name: LambdaSpringBootPostgresJavaApp
+      Name: MarketingDBApi

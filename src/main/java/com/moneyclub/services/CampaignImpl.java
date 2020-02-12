@@ -1,15 +1,19 @@
 package com.moneyclub.services;
 
+import com.moneyclub.dto.CampaignDTO;
+import com.moneyclub.dto.CampaignReportDTO;
 import com.moneyclub.dto.InvitationDTO;
 import com.moneyclub.exception.BusinessException;
 import com.moneyclub.exception.PersistentException;
 import com.moneyclub.model.CampaignEntity;
+import com.moneyclub.model.CampaignReport;
 import com.moneyclub.persist.ICampaignRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +68,45 @@ public class CampaignImpl implements ICampaign {
             throw new BusinessException("Database exception ::", ex);
         }
         return true;
+    }
+
+    @Override
+    public List<CampaignReportDTO> getCampaignReport(long campaignId, String campaignDate) throws BusinessException {
+        List<CampaignReportDTO> campaignReportDTOList = new ArrayList<>();
+        List<CampaignReport> campaignReportList = campaignRepository.generateCampaignReport(campaignId, campaignDate);
+        if(campaignReportList != null && campaignReportList.size() >0) {
+            for(CampaignReport campaignReport : campaignReportList) {
+                CampaignReportDTO campaignReportDTO = new CampaignReportDTO();
+                campaignReportDTO.setCampaignId(campaignReport.getCampaignId());
+                campaignReportDTO.setStatus(campaignReport.getStatus());
+                campaignReportDTO.setCampaignName(campaignReport.getCampaignName());
+                campaignReportDTO.setCount(campaignReport.getCount());
+                campaignReportDTOList.add(campaignReportDTO);
+            }
+        }
+        return campaignReportDTOList;
+    }
+
+    public List<CampaignDTO> getCampaignReportDetails(long campaignId) throws BusinessException {
+        List<CampaignDTO> campaignDTOS = new ArrayList<>();
+        List<CampaignEntity> campaignList = campaignRepository.generateCampaignReportDetails(campaignId);
+        if(campaignList != null && campaignList.size() >0) {
+            for(CampaignEntity campaignReport : campaignList) {
+                CampaignDTO campaignDTO = new CampaignDTO();
+                campaignDTO.setStartDate(campaignReport.getCreationDateTime());
+                campaignDTO.setEndDate(campaignReport.getSentDateTime());
+                campaignDTO.setCampaignId(campaignReport.getCampaignId());
+                campaignDTO.setStatusVal(campaignReport.getStatusVal());
+                campaignDTO.setEntityType(campaignReport.getEntityType());
+                campaignDTO.setEntityValue(campaignReport.getEntityVal());
+                campaignDTO.setStatusVal(campaignReport.getStatusVal());
+                campaignDTO.setMessage(campaignReport.getMessage());
+                campaignDTO.setClubName(campaignReport.getClubname());
+                campaignDTO.setComments(campaignReport.getComments());
+                campaignDTOS.add(campaignDTO);
+            }
+        }
+        return campaignDTOS;
     }
 
 

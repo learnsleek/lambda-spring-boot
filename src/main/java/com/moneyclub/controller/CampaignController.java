@@ -1,5 +1,7 @@
 package com.moneyclub.controller;
 
+import com.moneyclub.dto.CampaignDTO;
+import com.moneyclub.dto.CampaignReportDTO;
 import com.moneyclub.dto.ErrorDTO;
 import com.moneyclub.dto.InvitationDTO;
 import com.moneyclub.exception.*;
@@ -14,10 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(path = "/apis/campaign")
-public class Campaign {
+public class CampaignController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Campaign.class);
+    private static final Logger logger = LoggerFactory.getLogger(CampaignController.class);
 
     @Autowired
     ICampaign campaignService;
@@ -70,5 +73,47 @@ public class Campaign {
         }
         logger.info("updateCampaignStatus :: End - "+ status);
         return new ResponseEntity<Boolean>(status, HttpStatus.OK);
+    }
+
+    @RequestMapping({"/getReport"})
+    public ResponseEntity<Object> getReport(@RequestBody InvitationDTO invitationDTO) {
+        List<CampaignReportDTO> campaignReportDTOList = null;
+        try {
+            if (invitationDTO.getCampaignId()>0) {
+                logger.info("getReport :: Started - " + invitationDTO.getCampaignId());
+                campaignReportDTOList = campaignService.getCampaignReport(invitationDTO.getCampaignId(), invitationDTO.getMessage());
+            } else {
+                return new ResponseEntity(new ErrorDTO(100, "REQUIRED DATA MISSING"), HttpStatus.FORBIDDEN);
+            }
+        } catch (BusinessException ex) {
+            ex.printStackTrace();
+            throw new APIRequestException("getReport :: ", ex);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new APIRequestException("getReport :: ", ex);
+        }
+        logger.info("getReport:: End - "+ campaignReportDTOList);
+        return new ResponseEntity<>(campaignReportDTOList, HttpStatus.OK);
+    }
+
+    @RequestMapping({"/getReportDetails"})
+    public ResponseEntity<Object> getReportDetails(@RequestBody InvitationDTO invitationDTO) {
+        List<CampaignDTO> campaignDTOS = null;
+        try {
+            if (invitationDTO.getCampaignId() != null && invitationDTO.getCampaignId()>0) {
+                logger.info("getReportDetails :: Started - " + invitationDTO.getCampaignId());
+                campaignDTOS = campaignService.getCampaignReportDetails(invitationDTO.getCampaignId());
+            } else {
+                return new ResponseEntity(new ErrorDTO(100, "REQUIRED DATA MISSING"), HttpStatus.FORBIDDEN);
+            }
+        } catch (BusinessException ex) {
+            ex.printStackTrace();
+            throw new APIRequestException("getReportDetails :: ", ex);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new APIRequestException("getReportDetails :: ", ex);
+        }
+        logger.info("getReportDetails:: End - "+ campaignDTOS);
+        return new ResponseEntity<>(campaignDTOS, HttpStatus.OK);
     }
 }

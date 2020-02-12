@@ -2,7 +2,7 @@ package com.moneyclub.dto;
 
 import java.util.Date;
 
-public class InvitationDTO {
+public class CampaignDTO {
 
     private Long id;
     private Long campaignId;
@@ -10,7 +10,11 @@ public class InvitationDTO {
     private String entityValue;
     private String message;
     private int status;
-    private Date date;
+    private String statusVal;
+    private Date startDate;
+    private Date endDate;
+    private String comments;
+    private String clubName;
 
     public Long getId() {
         return id;
@@ -58,11 +62,44 @@ public class InvitationDTO {
         this.campaignId = campaignId;
     }
 
-    public Date getDate() {
-        return date;
+    public String getStatusVal() {
+        return statusVal;
     }
 
-    public void setDate(final Date date) {
-        this.date = date;
+    public void setStatusVal(String statusVal) {
+        this.statusVal = statusVal;
     }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getClubName() {
+        return clubName;
+    }
+
+    public void setClubName(String clubName) {
+        this.clubName = clubName;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
 }

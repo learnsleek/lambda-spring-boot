@@ -11,6 +11,7 @@ public class CampaignEntity {
     private String entityVal;
     private String message;
     private int status;
+    private String statusVal;
     private String comments;
     private String clubname;
     private Long campaignId;
@@ -32,6 +33,25 @@ public class CampaignEntity {
         this.clubname = clubname;
         this.campaignId = campaignId;
     }
+    public CampaignEntity(long campaignId, String clubname, String statusVal, long count ){
+        this.campaignId = campaignId;
+        this.clubname = clubname;
+        this.statusVal = statusVal;
+        this.id = count;
+    }
+    public  CampaignEntity(Date creationDateTime, Date sentDateTime,
+                           String entityType, String entityVal,
+                           String statusVal, String comments, String clubname){
+        this.creationDateTime = creationDateTime;
+        this.sentDateTime = sentDateTime;
+        this.entityType = entityType;
+        this.entityVal = entityVal;
+        this.statusVal = statusVal;
+        this.comments = comments;
+        this.clubname = clubname;
+    }
+
+
     public CampaignEntity(){
 
     }
@@ -117,6 +137,16 @@ public class CampaignEntity {
     public void setCampaignId(Long campaignId) {
         this.campaignId = campaignId;
     }
+
+    public String getStatusVal() {
+        return statusVal;
+    }
+
+    public void setStatusVal(String statusVal) {
+        this.statusVal = statusVal;
+    }
+
+
 
     @Override
     public String toString() {
