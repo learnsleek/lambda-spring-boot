@@ -1,13 +1,15 @@
 package com.moneyclub.dto;
 
-public class ErrorDTO implements DTO {
-    private  int errorCode;
-    private  String errorMessage;
+public class ResponseDTO implements  DTO {
 
-    public ErrorDTO(int errorCode, String errorMessage) {
-        this.errorCode = errorCode;
+    private int errorCode;
+    private String errorMessage;
+
+    public ResponseDTO(int errorCode, String errorMessage){
+        this.errorCode =errorCode;
         this.errorMessage = errorMessage;
     }
+
     public int getErrorCode() {
         return errorCode;
     }

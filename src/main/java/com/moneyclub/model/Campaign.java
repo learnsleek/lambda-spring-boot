@@ -1,10 +1,9 @@
-package com.moneyclub.dto;
+package com.moneyclub.model;
 
 import java.sql.Timestamp;
 import java.util.List;
 
-public class CampaignDTO implements DTO {
-
+public class Campaign {
     private long id;
     private int status;
     private String name;
@@ -12,10 +11,7 @@ public class CampaignDTO implements DTO {
     private Timestamp createdTime;
     private Timestamp dispatchTime;
     private String desc;
-    private String message;
-    private int count;
-    private String statusTxt;
-    private List<CampaignDetailDTO> campaignDetailsList;
+    private List<CampaignData> campaignData;
 
     public long getId() {
         return id;
@@ -23,14 +19,6 @@ public class CampaignDTO implements DTO {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public String getName() {
@@ -73,35 +61,19 @@ public class CampaignDTO implements DTO {
         this.desc = desc;
     }
 
-    public String getMessage() {
-        return message;
+    public List<CampaignData> getCampaignData() {
+        return campaignData;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setCampaignData(List<CampaignData> campaignData) {
+        this.campaignData = campaignData;
     }
 
-    public List<CampaignDetailDTO> getCampaignDetailsList() {
-        return campaignDetailsList;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCampaignDetailsList(List<CampaignDetailDTO> campaignDetailsList) {
-        this.campaignDetailsList = campaignDetailsList;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public String getStatusTxt() {
-        return statusTxt;
-    }
-
-    public void setStatusTxt(String statusTxt) {
-        this.statusTxt = statusTxt;
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

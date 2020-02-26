@@ -16,7 +16,10 @@ begin
 END;
 $getMemberDetail$
 LANGUAGE plpgsql;
+------------------------------------------------------------------------------------------
 
+
+------------------------------------------------------------------------------------------
 create or replace function getMembersForClub(entityType text, entityValue text, status text)
 returns table(clubId int8, clubName text, ownerMemberId int8, memberId int8)
 as $getMembersForClub$
@@ -34,6 +37,12 @@ begin
 END;
 $getMembersForClub$
 LANGUAGE plpgsql;
+
+------------------------------------------------------------------------------------------
+
+
+
+------------------------------------------------------------------------------------------
 
 create or replace function getMembersDetailsForClub(entityType text, entityValue text, status text)
 returns table(clubId int8, clubName text, ownerMemberId int8, memberId int8,

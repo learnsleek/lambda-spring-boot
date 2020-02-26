@@ -1,6 +1,6 @@
 package com.moneyclub.services;
 
-import com.moneyclub.dto.CampaignDTO;
+import com.moneyclub.dto.CampaignDetailDTO;
 import com.moneyclub.dto.CampaignReportDTO;
 import com.moneyclub.dto.InvitationDTO;
 import com.moneyclub.exception.BusinessException;
@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class CampaignImpl implements ICampaign {
     public Boolean updateCampaignStatus(long id, int status, String comments) throws BusinessException {
         try {
         //List<CampaignEntity>  campaignEntityList = campaignRepository.findByEntityTypeAndEntityVal(entityType, entityValue);
-            List<CampaignEntity>  campaignEntityList = campaignRepository.findById(id);
+            List<CampaignEntity>  campaignEntityList = campaignRepository.findCampaignDetailsById(id);
         logger.info("id" + id + "campaignEntityList" +campaignEntityList );
         if(campaignEntityList != null && campaignEntityList.size() >0) {
             CampaignEntity campaignEntity = campaignEntityList.get(0);
@@ -71,9 +70,9 @@ public class CampaignImpl implements ICampaign {
     }
 
     @Override
-    public List<CampaignReportDTO> getCampaignReport(long campaignId, String campaignDate) throws BusinessException {
+    public List<CampaignReportDTO> getCampaignReportSummary(long campaignId, String campaignDate) throws BusinessException {
         List<CampaignReportDTO> campaignReportDTOList = new ArrayList<>();
-        List<CampaignReport> campaignReportList = campaignRepository.generateCampaignReport(campaignId, campaignDate);
+        List<CampaignReport> campaignReportList = campaignRepository.generateCampaignReportSummary(campaignId, campaignDate);
         if(campaignReportList != null && campaignReportList.size() >0) {
             for(CampaignReport campaignReport : campaignReportList) {
                 CampaignReportDTO campaignReportDTO = new CampaignReportDTO();
@@ -87,12 +86,13 @@ public class CampaignImpl implements ICampaign {
         return campaignReportDTOList;
     }
 
-    public List<CampaignDTO> getCampaignReportDetails(long campaignId) throws BusinessException {
-        List<CampaignDTO> campaignDTOS = new ArrayList<>();
+    public List<CampaignDetailDTO> getCampaignReportDetails(long campaignId) throws BusinessException {
+        List<CampaignDetailDTO> campaignDTOS = new ArrayList<>();
         List<CampaignEntity> campaignList = campaignRepository.generateCampaignReportDetails(campaignId);
         if(campaignList != null && campaignList.size() >0) {
             for(CampaignEntity campaignReport : campaignList) {
-                CampaignDTO campaignDTO = new CampaignDTO();
+                CampaignDetailDTO campaignDTO = new CampaignDetailDTO();
+                campaignDTO.setCampaignName(campaignReport.getCampaignName());
                 campaignDTO.setStartDate(campaignReport.getCreationDateTime());
                 campaignDTO.setEndDate(campaignReport.getSentDateTime());
                 campaignDTO.setCampaignId(campaignReport.getCampaignId());

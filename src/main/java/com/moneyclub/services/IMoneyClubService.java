@@ -14,8 +14,4 @@ public interface IMoneyClubService {
     List<ClubDTO> getMembersForClub(RequestDTO requestDTO) throws BusinessException;
     List<ClubDTO> getMembersDetailsForClub(final String requestType, final String requestValue, final String status) throws BusinessException;
 
-
-
-
-
 }

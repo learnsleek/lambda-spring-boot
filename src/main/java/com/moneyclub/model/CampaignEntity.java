@@ -1,12 +1,12 @@
 package com.moneyclub.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class CampaignEntity {
 
     private Long id;
-    private Date creationDateTime;
-    private Date sentDateTime;
+    private Timestamp creationDateTime;
+    private Timestamp sentDateTime;
     private String entityType;
     private String entityVal;
     private String message;
@@ -15,10 +15,11 @@ public class CampaignEntity {
     private String comments;
     private String clubname;
     private Long campaignId;
+    private String campaignName;
 
 
 
-    public  CampaignEntity(Long id, Date creationDateTime, Date sentDateTime,
+    public  CampaignEntity(Long id, Timestamp creationDateTime, Timestamp sentDateTime,
                            String entityType, String entityVal, String message,
                            int status, String comments, String clubname,
                            long campaignId){
@@ -39,9 +40,10 @@ public class CampaignEntity {
         this.statusVal = statusVal;
         this.id = count;
     }
-    public  CampaignEntity(Date creationDateTime, Date sentDateTime,
+    public  CampaignEntity(String campaingnName, Timestamp creationDateTime, Timestamp sentDateTime,
                            String entityType, String entityVal,
                            String statusVal, String comments, String clubname){
+        this.campaignName = campaingnName;
         this.creationDateTime = creationDateTime;
         this.sentDateTime = sentDateTime;
         this.entityType = entityType;
@@ -106,19 +108,19 @@ public class CampaignEntity {
         this.comments = comments;
     }
 
-    public Date getCreationDateTime() {
+    public Timestamp getCreationDateTime() {
         return creationDateTime;
     }
 
-    public void setCreationDateTime(Date creationDateTime) {
+    public void setCreationDateTime(Timestamp creationDateTime) {
         this.creationDateTime = creationDateTime;
     }
 
-    public Date getSentDateTime() {
+    public Timestamp getSentDateTime() {
         return sentDateTime;
     }
 
-    public void setSentDateTime(Date sentDateTime) {
+    public void setSentDateTime(Timestamp sentDateTime) {
         this.sentDateTime = sentDateTime;
     }
 
@@ -146,7 +148,13 @@ public class CampaignEntity {
         this.statusVal = statusVal;
     }
 
+    public String getCampaignName() {
+        return campaignName;
+    }
 
+    public void setCampaignName(final String campaignName) {
+        this.campaignName = campaignName;
+    }
 
     @Override
     public String toString() {

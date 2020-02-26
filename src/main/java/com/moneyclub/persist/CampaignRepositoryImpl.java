@@ -1,19 +1,24 @@
 package com.moneyclub.persist;
 
 import com.moneyclub.exception.PersistentException;
+import com.moneyclub.model.Campaign;
+import com.moneyclub.model.CampaignData;
 import com.moneyclub.model.CampaignEntity;
 import com.moneyclub.model.CampaignReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -38,8 +43,8 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
                     (rs, rowNum) ->
                             new CampaignEntity(
                                     rs.getLong("id"),
-                                    rs.getDate("creationDateTime"),
-                                    rs.getDate("sentDateTime"),
+                                    rs.getTimestamp("creationDateTime"),
+                                    rs.getTimestamp("sentDateTime"),
                                     rs.getString("entityType"),
                                     rs.getString("entityValue"),
                                     rs.getString("message"),
@@ -56,7 +61,7 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
     }
 
     @Override
-    public List<CampaignReport> generateCampaignReport(long campaignId, String campaignDate) throws PersistentException {
+    public List<CampaignReport> generateCampaignReportSummary(long campaignId, String campaignDate) throws PersistentException {
         List<CampaignReport> campaignReportList = null;
         try {
             campaignReportList = jdbcTemplateMarketing.query("SELECT * from campaign_report(?, ?)",
@@ -89,8 +94,9 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
                     new Object[] {campaignId},
                     (rs, rowNum) ->
                             new CampaignEntity(
-                                    rs.getDate("creationtime"),
-                                    rs.getDate("senttime"),
+                                    rs.getString("campaign_name"),
+                                    rs.getTimestamp("creationtime"),
+                                    rs.getTimestamp("senttime"),
                                     rs.getString("entitytyp"),
                                     rs.getString("entityvalu"),
                                     rs.getString("stat"),
@@ -121,8 +127,8 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
                     (rs, rowNum) ->
                             new CampaignEntity(
                                     rs.getLong("id"),
-                                    rs.getDate("creationDateTime"),
-                                    rs.getDate("sentDateTime"),
+                                    rs.getTimestamp("creationDateTime"),
+                                    rs.getTimestamp("sentDateTime"),
                                     rs.getString("entityType"),
                                     rs.getString("entityValue"),
                                     rs.getString("message"),
@@ -139,7 +145,7 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
     }
 
     @Override
-    public List<CampaignEntity>  findById(Long id) throws PersistentException {
+    public List<CampaignEntity>  findCampaignDetailsById(Long id) throws PersistentException {
         List<CampaignEntity> campaignEntityList = null;
         try {
             campaignEntityList = jdbcTemplateMarketing.query(
@@ -148,8 +154,8 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
                     (rs, rowNum) ->
                             new CampaignEntity(
                                     rs.getLong("id"),
-                                    rs.getDate("creationDateTime"),
-                                    rs.getDate("sentDateTime"),
+                                    rs.getTimestamp("creationDateTime"),
+                                    rs.getTimestamp("sentDateTime"),
                                     rs.getString("entityType"),
                                     rs.getString("entityValue"),
                                     rs.getString("message"),
@@ -176,5 +182,55 @@ public class CampaignRepositoryImpl implements ICampaignRepository {
             throw new PersistentException("Error querying updateStatus from database", ex);
         }
         return stat;
+    }
+
+    @Transactional
+    public int createCampaign(final Campaign campaign) throws PersistentException {
+        int status = -1;
+        try {
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            String QueryCampaign = "INSERT INTO public.mc_campaign\n" +
+                    "(creationdatetime, name, type, comments)\n" +
+                    "VALUES( now(), ?, ?, ?)";
+            String QueryCampaignData = "INSERT INTO public.mc_campaign_details" +
+                    "(creationdatetime, entitytype, entityvalue, status,clubname ,campaign_id, message) " +
+                    "values(now(), ?, ?, ?, ?, ?, ?);";
+
+            jdbcTemplateMarketing.update(
+                    connection -> {
+                        PreparedStatement ps = connection.prepareStatement(QueryCampaign, new String[]{"id"});
+                        ps.setString(1, campaign.getName());
+                        ps.setString(2, campaign.getType());
+                        ps.setString(3, campaign.getDesc());
+                        return ps;
+                    }, keyHolder);
+            Long campaignId = keyHolder.getKey().longValue();
+            List<CampaignData> campaignDataList = campaign.getCampaignData();
+            if (campaignId != null && campaign.getCampaignData() != null && campaignDataList.size() > 0) {
+
+                jdbcTemplateMarketing.batchUpdate(QueryCampaignData, new BatchPreparedStatementSetter() {
+                    @Override
+                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+
+                        ps.setString(1, campaign.getType() != null ? campaign.getType() : "");
+                        ps.setString(2, campaignDataList.get(i).getRequestType() != null ? campaignDataList.get(i).getRequestType() : "");
+                        ps.setInt(3, campaign.getStatus() >= 0 ? campaign.getStatus() : 9999);
+                        ps.setString(4, campaign.getName() != null ? campaign.getName() : "");
+                        ps.setLong(5, campaignId);
+                        ps.setString(6, campaignDataList.get(i).getMessage() != null ? campaignDataList.get(i).getMessage() : "");
+
+                    }
+                    @Override
+                    public int getBatchSize() {
+                        return campaignDataList.size();
+                    }
+                });
+                return  Math.toIntExact(campaignId);
+            }
+        } catch (Exception sq){
+            sq.printStackTrace();
+            throw new PersistentException( "createCampaign Exception", sq);
+        }
+        return status;
     }
 }

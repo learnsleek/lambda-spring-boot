@@ -1,6 +1,6 @@
 package com.moneyclub.controller;
 
-import com.moneyclub.dto.CampaignDTO;
+import com.moneyclub.dto.CampaignDetailDTO;
 import com.moneyclub.dto.CampaignReportDTO;
 import com.moneyclub.dto.ErrorDTO;
 import com.moneyclub.dto.InvitationDTO;
@@ -79,9 +79,9 @@ public class CampaignController {
     public ResponseEntity<Object> getReport(@RequestBody InvitationDTO invitationDTO) {
         List<CampaignReportDTO> campaignReportDTOList = null;
         try {
-            if (invitationDTO.getCampaignId()>0) {
+            if (invitationDTO.getCampaignId() != null) {
                 logger.info("getReport :: Started - " + invitationDTO.getCampaignId());
-                campaignReportDTOList = campaignService.getCampaignReport(invitationDTO.getCampaignId(), invitationDTO.getMessage());
+                campaignReportDTOList = campaignService.getCampaignReportSummary(invitationDTO.getCampaignId(), invitationDTO.getMessage());
             } else {
                 return new ResponseEntity(new ErrorDTO(100, "REQUIRED DATA MISSING"), HttpStatus.FORBIDDEN);
             }
@@ -98,7 +98,7 @@ public class CampaignController {
 
     @RequestMapping({"/getReportDetails"})
     public ResponseEntity<Object> getReportDetails(@RequestBody InvitationDTO invitationDTO) {
-        List<CampaignDTO> campaignDTOS = null;
+        List<CampaignDetailDTO> campaignDTOS = null;
         try {
             if (invitationDTO.getCampaignId() != null && invitationDTO.getCampaignId()>0) {
                 logger.info("getReportDetails :: Started - " + invitationDTO.getCampaignId());

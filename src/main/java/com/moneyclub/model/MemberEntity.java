@@ -9,6 +9,7 @@ public class MemberEntity {
     private String lastName;
     private String email;
     private long mobile;
+    private long whatAppNumber;
     private Date registerDate;
     private String gender;
     private String monthlyincome;
@@ -135,5 +136,13 @@ public class MemberEntity {
 
     public void setMotivation(String motivation) {
         this.motivation = motivation;
+    }
+
+    public long getWhatAppNumber() {
+        return whatAppNumber;
+    }
+
+    public void setWhatAppNumber(long whatAppNumber) {
+        this.whatAppNumber = whatAppNumber;
     }
 }

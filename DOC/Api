@@ -1,0 +1,50 @@
+contractor02@themoneyclub.in
+getReport
+URL -
+http://localhost:8087/apis/campaign/getReport
+data -
+{"campaignId" : "11" , "message" : "2020-02-05"}
+
+
+getReportDetails
+URL -
+http://localhost:8087/apis/campaign/getReportDetails
+data -
+{"campaignId" : "12"}
+
+
+create Campaign
+URL - POST
+http://localhost:8087/api/campaign/
+data:-
+{
+"name" : "6k12 - Club ",
+"type" : "WHATSAPP",
+"desc" : " 6k12 - Club  on 2374972",
+"message" : "CLUB INVITATION Hi We are going to start our next club within 2 days. Club Details ontribution = Rs.800 per member Frequency = 3",
+"campaignDetailsList" : [
+{
+"entityValue" : "9971470203",
+"message" : "Overridden Message1",
+"comments" : "comments1"
+},
+{
+"entityValue" : "9971470203",
+"message" : "Overridden Message2",
+"comments" : "comments2"
+}
+]
+}
+
+
+Campaign Details:-
+URL :-
+http://localhost:8087/api/campaign/details
+data :-
+{"id" : 24}
+
+Campaign Summary :-
+URL -
+http://localhost:8087/api/campaign/summary
+data :-
+{"id":0,"createdTime":"2020-12-24"}
