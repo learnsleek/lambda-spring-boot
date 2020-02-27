@@ -1,11 +1,13 @@
 package com.moneyclub.dto;
 
+import java.util.List;
+
 public class ClubDTO {
     private long clubId;
     private String clubName;
     private long ownerMemberId;
     private long memberId;
-    private MemberDTO memberDTO;
+    private List<MemberDTO> memberDTOList;
 
     public long getClubId() {
         return clubId;
@@ -39,11 +41,11 @@ public class ClubDTO {
         this.memberId = memberId;
     }
 
-    public MemberDTO getMemberDTO() {
-        return memberDTO;
+    public List<MemberDTO> getMemberDTOList() {
+        return memberDTOList;
     }
 
-    public void setMemberDTO(MemberDTO memberDTO) {
-        this.memberDTO = memberDTO;
+    public void setMemberDTOList(List<MemberDTO> memberDTOList) {
+        this.memberDTOList = memberDTOList;
     }
 }

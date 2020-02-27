@@ -60,13 +60,13 @@ public class MoneyClubServiceImpl implements  IMoneyClubService {
     }
 
     @Override
-    public List<ClubDTO> getMembersDetailsForClub(final String requestType, final String requestValue, final String status) throws BusinessException {
-        List<ClubDTO> clubDTOS = null;
+    public ClubDTO getMembersDetailsForClub(final String requestType, final String requestValue, final String status) throws BusinessException {
+        ClubDTO club = null;
         List<ClubEntity>  clubEntities = moneyClubRepository.getMembersDetailsForClub(requestType, requestValue, status);
         if (clubEntities != null & clubEntities.size() >0){
-            clubDTOS = new ArrayList<>();
+             club = new ClubDTO();
+             List<MemberDTO> memberDTOList = new ArrayList<>();
             for(ClubEntity clubEntity  : clubEntities) {
-                ClubDTO club = new ClubDTO();
                 club.setClubId(clubEntity.getClubId());
                 club.setClubName(clubEntity.getClubName());
                 club.setMemberId(clubEntity.getMemberId());
@@ -85,11 +85,24 @@ public class MoneyClubServiceImpl implements  IMoneyClubService {
                         memberDTO.setMobile(clubEntity.getMemberEntity().getMobile());
                     if(clubEntity.getMemberEntity().getMemberId() > 0)
                         memberDTO.setMemberId(clubEntity.getMemberEntity().getMemberId());
-                    club.setMemberDTO(memberDTO);
+                    if(clubEntity.getMemberEntity().getGender() != null)
+                        memberDTO.setGender(clubEntity.getMemberEntity().getGender());
+                    if(clubEntity.getMemberEntity().getMonthlyincome() != null)
+                        memberDTO.setMonthlyincome(clubEntity.getMemberEntity().getMonthlyincome());
+                    if(clubEntity.getMemberEntity().getOccupation() != null)
+                        memberDTO.setOccupation(clubEntity.getMemberEntity().getOccupation());
+                    if(clubEntity.getMemberEntity().getCity() != null)
+                        memberDTO.setCity(clubEntity.getMemberEntity().getCity());
+                    if(clubEntity.getMemberEntity().getOrganization() != null)
+                        memberDTO.setOrganization(clubEntity.getMemberEntity().getOrganization());
+                    if(clubEntity.getMemberEntity().getMotivation() != null)
+                        memberDTO.setMotivation(clubEntity.getMemberEntity().getMotivation());
+
+                    memberDTOList.add(memberDTO);
                 }
-                clubDTOS.add(club);
+                club.setMemberDTOList(memberDTOList);
             }
         }
-        return clubDTOS;
+        return club;
     }
 }

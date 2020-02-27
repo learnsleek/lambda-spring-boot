@@ -70,11 +70,11 @@ public class MoneyClubController {
 
     @RequestMapping({"/getClubMemberDetails"})
     public ResponseEntity<Object> getClubMemberDetails(@RequestBody RequestDTO requestDTO) {
-        List<ClubDTO> clubDTOS = null;
+        ClubDTO clubDTO = null;
         try {
             if (requestDTO.getRequestType() != null && requestDTO.getRequestValue() !=null) {
                 logger.info("getClubMemberDetails :: Started - " + requestDTO.getRequestType() + " request val ::" + requestDTO.getRequestValue());
-                clubDTOS = moneyClubService.getMembersDetailsForClub(requestDTO.getRequestType(),requestDTO.getRequestValue(), requestDTO.getRequestStatus());
+                clubDTO = moneyClubService.getMembersDetailsForClub(requestDTO.getRequestType(),requestDTO.getRequestValue(), requestDTO.getRequestStatus());
 
             } else {
                 return new ResponseEntity(new ErrorDTO(100, "REQUIRED DATA MISSING"), HttpStatus.FORBIDDEN);
@@ -86,7 +86,7 @@ public class MoneyClubController {
             ex.printStackTrace();
             throw new APIRequestException("getClubMemberDetails :: ", ex);
         }
-        logger.info("getClubMemberDetails :: End - "+ clubDTOS);
-        return new ResponseEntity<>(clubDTOS, HttpStatus.OK);
+        logger.info("getClubMemberDetails :: End - "+ clubDTO);
+        return new ResponseEntity<>(clubDTO, HttpStatus.OK);
     }
 }

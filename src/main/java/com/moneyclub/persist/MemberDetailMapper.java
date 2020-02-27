@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MemberDetailMapper implements RowMapper<ClubEntity> {
+
     @Override
     public ClubEntity mapRow(ResultSet rs, int i) throws SQLException {
         MemberEntity memberEntity = new MemberEntity();

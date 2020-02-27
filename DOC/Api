@@ -48,3 +48,11 @@ URL -
 http://localhost:8087/api/campaign/summary
 data :-
 {"id":0,"createdTime":"2020-12-24"}
+
+
+Money club----------------------------
+getClubMemberDetails
+URL-
+http://localhost:8087/apis/mc/getClubMemberDetails
+data: -
+{"requestType":"CLUBID_MEMBERDETAILS", "requestValue":"1580368000758"}
