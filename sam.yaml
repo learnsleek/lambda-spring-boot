@@ -9,7 +9,7 @@ Resources:
       Handler: com.moneyclub.LambdaHandler::handleRequest
       Runtime: java8
       CodeUri: target/club-0.0.1-SNAPSHOT.jar
-      MemorySize: 1512
+      MemorySize: 2048
       Policies: AWSLambdaBasicExecutionRole
       Timeout: 900
       Events:
@@ -22,6 +22,6 @@ Resources:
 Outputs:
   MarketingDBApi:
     Description: URL for application
-    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Stage/'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/'
     Export:
-      Name: MarketingLamdaDBApi
+      Name: mcMarketingDb

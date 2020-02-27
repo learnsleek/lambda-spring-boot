@@ -10,3 +10,5 @@ aws cloudformation package --template-file sam.yaml --output-template-file targe
 
 aws cloudformation deploy --template-file target/output-sam.yaml --stack-name mc-lamda-marketing-mcdb --capabilities CAPABILITY_IAM --profile=mc
 
+aws cloudformation deploy --template-file target/output-sam.yaml --stack-name mc-lamda-marketing-mcdb-prod --capabilities CAPABILITY_IAM --profile=mc
+
